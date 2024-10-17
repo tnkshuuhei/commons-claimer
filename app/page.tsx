@@ -33,11 +33,15 @@ export default function CommonsTokenClaimPage() {
   const { toast } = useToast();
   const account = useAccount();
   const { data: hash, writeContract } = useWriteContract();
+
   const countdownTime = useReadContract({
     abi: rewardConfig.abi,
     address: rewardConfig.address as `0x${string}`,
     functionName: "timeUntilNextClaim",
     args: [account.address as `0x${string}`],
+    query: {
+      refetchInterval: 1,
+    },
   });
 
   const canClaim = useReadContract({
@@ -45,12 +49,18 @@ export default function CommonsTokenClaimPage() {
     address: rewardConfig.address as `0x${string}`,
     functionName: "canClaimReward",
     args: [account.address as `0x${string}`],
+    query: {
+      refetchInterval: 1,
+    },
   });
 
   const tokenBalance = useBalance({
     address: account.address,
     chainId: celo.id,
     token: TOKEN_ADDRESS as `0x${string}`,
+    query: {
+      refetchInterval: 1,
+    },
   });
 
   const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
