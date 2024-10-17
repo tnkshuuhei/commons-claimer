@@ -1,9 +1,15 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Loader2, Check, Coins } from "lucide-react";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import { Loader2, RefreshCw, Coins } from "lucide-react";
+import {
+  useAccount,
+  useBalance,
+  useReadContract,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { celo } from "wagmi/chains";
 
 import { Button } from "@/components/ui/button";
@@ -19,10 +25,33 @@ import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 
 import { rewardConfig } from "@/abis/reward";
+import { formatTime, formatTokenAmount, TOKEN_ADDRESS } from "@/utils";
 
 export default function CommonsTokenClaimPage() {
+  const [tokenPrice, setTokenPrice] = useState(null);
+
   const { toast } = useToast();
+  const account = useAccount();
   const { data: hash, writeContract } = useWriteContract();
+  const countdownTime = useReadContract({
+    abi: rewardConfig.abi,
+    address: rewardConfig.address as `0x${string}`,
+    functionName: "timeUntilNextClaim",
+    args: [account.address as `0x${string}`],
+  });
+
+  const canClaim = useReadContract({
+    abi: rewardConfig.abi,
+    address: rewardConfig.address as `0x${string}`,
+    functionName: "canClaimReward",
+    args: [account.address as `0x${string}`],
+  });
+
+  const tokenBalance = useBalance({
+    address: account.address,
+    chainId: celo.id,
+    token: TOKEN_ADDRESS as `0x${string}`,
+  });
 
   const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
     chainId: celo.id,
@@ -67,36 +96,49 @@ export default function CommonsTokenClaimPage() {
 
   return (
     <main>
-      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+        <h1 className="text-3xl font-bold mb-4">Commons Builder Income</h1>
         <Card className="w-[350px]">
-          <CardHeader>
-            <CardTitle>Commons Token Claim</CardTitle>
+          <CardHeader className="text-center items-center">
+            <CardTitle>$COMMONS</CardTitle>
             <CardDescription>
-              Connect your wallet and claim your tokens
+              You can claim 10 $COMMONS every 24 hours.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
+            {account.isConnected && (
+              <div className="text-center mb-4">
+                <p className="font-bold">Your COMMONS Balance</p>
+                <p className="text-2xl">
+                  {`${formatTokenAmount(
+                    tokenBalance.data?.value!,
+                    tokenBalance.data?.decimals!
+                  )}`}
+                  $COMMONS
+                </p>
+                {tokenPrice !== null ? (
+                  <p className="text-sm text-gray-500">
+                    ($
+                    {(
+                      Number(
+                        formatTokenAmount(
+                          tokenBalance.data?.value!,
+                          tokenBalance.data?.decimals!
+                        )
+                      ) * tokenPrice
+                    ).toFixed(2)}
+                    USD)
+                  </p>
+                ) : (
+                  <p className="text-sm text-gray-500">Unable to fetch price</p>
+                )}
+                <Button disabled variant="outline" size="sm" className="mt-2">
+                  <RefreshCw className="mr-2 h-4 w-4" />
+                  Refresh Price
+                </Button>
+              </div>
+            )}
             <ConnectButton />
-            {/* <Button
-              onClick={checkEligibility}
-              // disabled={!walletConnected}
-              className="w-full"
-            >
-              <Check className="mr-2 h-4 w-4" />
-              Check Eligibility
-            </Button>
-            {isEligible !== null && (
-              <Alert variant={isEligible ? "default" : "destructive"}>
-                <AlertTitle>
-                  {isEligible ? "Eligible" : "Not Eligible"}
-                </AlertTitle>
-                <AlertDescription>
-                  {isEligible
-                    ? "You are eligible to claim Commons tokens."
-                    : "Sorry, you are not eligible to claim Commons tokens."}
-                </AlertDescription>
-              </Alert>
-            )} */}
             <Button
               onClick={() =>
                 writeContract(
@@ -123,15 +165,23 @@ export default function CommonsTokenClaimPage() {
                 )
               }
               className="w-full"
-              disabled={isLoading}
+              disabled={isLoading || !account.isConnected || !canClaim.data}
             >
               {isLoading ? (
                 <Loader2 className="mr-2 h-4 w-4" />
               ) : (
                 <Coins className="mr-2 h-4 w-4" />
               )}
-              Claim Tokens
+              {!canClaim.data ? "Not Eligible" : "Claim 10 $COMMONS"}
             </Button>
+            <div className="text-center items-center">
+              <p className="font-bold">Next Claim In</p>
+              <p className="text-xl">
+                {account.isConnected
+                  ? formatTime(Number(countdownTime.data))
+                  : "--------"}
+              </p>
+            </div>
           </CardContent>
         </Card>
       </div>
