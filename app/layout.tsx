@@ -12,7 +12,7 @@ import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 
 const config = getDefaultConfig({
-  appName: "$COMMONS MINTER",
+  appName: "$COMMONS Claimer",
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
   chains: [celo],
   ssr: true,
@@ -27,7 +27,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <title>$COMMONS Minter</title>
+        <title>$COMMONS Claimer</title>
         <meta
           name="description"
           content="build public goods and earn $COMMONS"
