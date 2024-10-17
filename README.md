@@ -21,26 +21,3 @@ pnpm dev
 ```
 pnpm build
 ```
-
-## Smart Contract
-
-### compile
-
-```
-
-npm run compile:hardhat
-
-or
-npm run compile:foundry
-
-```
-
-### test
-
-```
-npm run test:hardhat
-
-or
-
-npm run test:foundry
-```
