@@ -54,6 +54,17 @@ export default function CommonsTokenClaimPage() {
     },
   });
 
+  const whitelisted = useReadContract({
+    abi: rewardConfig.abi,
+    address: rewardConfig.address as `0x${string}`,
+    functionName: "whitelist",
+    args: [account.address as `0x${string}`],
+    query: {
+      refetchInterval: 1,
+    },
+  });
+
+
   const tokenBalance = useBalance({
     address: account.address,
     chainId: celo.id,
@@ -112,7 +123,7 @@ export default function CommonsTokenClaimPage() {
           <CardHeader className="text-center items-center">
             <CardTitle>$COMMONS</CardTitle>
             <CardDescription>
-              You can claim 10 $COMMONS every 24 hours.
+              You can claim 10 $COMMONS every 24 hours. {whitelisted.data}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -182,7 +193,7 @@ export default function CommonsTokenClaimPage() {
               ) : (
                 <Coins className="mr-2 h-4 w-4" />
               )}
-              {!canClaim.data ? "Not Eligible" : "Claim 10 $COMMONS"}
+              {!whitelisted.data ? "Not Eligible" : !canClaim.data ? "Patience, young commoner" : "Claim 10 $COMMONS"}
             </Button>
             <div className="text-center items-center">
               <p className="font-bold">Next Claim In</p>
@@ -198,3 +209,6 @@ export default function CommonsTokenClaimPage() {
     </main>
   );
 }
+
+// FAQ: 
+// What happens if you forget to claim your commons token?
