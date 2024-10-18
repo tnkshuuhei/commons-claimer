@@ -204,6 +204,8 @@ export default function CommonsTokenClaimPage() {
             </div>
           </CardContent>
         </Card>
+        <br />
+        <a href="https://twitter.com/CommonsProtocol" data-size="large" class="twitter-follow-button" data-show-count="false"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
       </div>
     </main>
   );
