@@ -118,10 +118,9 @@ export default function CommonsTokenClaimPage() {
   return (
     <main>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
-        <h1 className="text-3xl font-bold mb-4">Commons Builder Income</h1>
         <Card className="w-[350px]">
           <CardHeader className="text-center items-center">
-            <CardTitle>$COMMONS</CardTitle>
+            <CardTitle>Commons Builder Income</CardTitle>
             <CardDescription>
               You can claim 10 $COMMONS every 24 hours.
             </CardDescription>
@@ -129,13 +128,13 @@ export default function CommonsTokenClaimPage() {
           <CardContent className="space-y-4">
             {account.isConnected && (
               <div className="text-center mb-4">
-                <p className="font-bold">Your COMMONS Balance</p>
+                <p className="font-bold">Your Balance</p>
                 <p className="text-2xl">
                   {`${formatTokenAmount(
                     tokenBalance.data?.value!,
                     tokenBalance.data?.decimals!
                   )}`}
-                  $COMMONS
+                  {` $COMMONS`}
                 </p>
                 {tokenPrice !== null ? (
                   <p className="text-sm text-gray-500">
