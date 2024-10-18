@@ -123,7 +123,7 @@ export default function CommonsTokenClaimPage() {
           <CardHeader className="text-center items-center">
             <CardTitle>$COMMONS</CardTitle>
             <CardDescription>
-              You can claim 10 $COMMONS every 24 hours. {whitelisted.data}
+              You can claim 10 $COMMONS every 24 hours.
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -209,6 +209,3 @@ export default function CommonsTokenClaimPage() {
     </main>
   );
 }
-
-// FAQ: 
-// What happens if you forget to claim your commons token?
