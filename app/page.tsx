@@ -121,21 +121,22 @@ export default function CommonsTokenClaimPage() {
     <main>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
         <Card className="w-[350px]">
+
           <CardHeader className="text-center items-center">
             <CardTitle>Commons Builder Income</CardTitle>
             <CardDescription>
-              You can claim 10 $COMMONS every 24 hours.
+              You can claim 10 $COMMONS per day
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {account.isConnected && (
               <div className="text-center mb-4">
-                <p className="font-bold">Your Balance</p>
-                <p className="text-2xl">
-                  {`${formatTokenAmount(
+                <p className="font-bold text-sm" style={{color: '#777777', marginTop: '20px'}} >Your Balance</p>
+                <p className="text-lg" style={{marginBottom: '40px'}}>
+                  <b>{`${formatTokenAmount(
                     tokenBalance.data?.value!,
                     tokenBalance.data?.decimals!
-                  )}`}
+                  )}`}</b>
                   {` $COMMONS`}
                 </p>
                 {tokenPrice !== null ? (
@@ -152,16 +153,23 @@ export default function CommonsTokenClaimPage() {
                     USD)
                   </p>
                 ) : (
-                  <p className="text-sm text-gray-500">Unable to fetch price</p>
+                  ""
                 )}
-                <Button disabled variant="outline" size="sm" className="mt-2">
+                {/* <Button disabled variant="outline" size="sm" className="mt-2">
                   <RefreshCw className="mr-2 h-4 w-4" />
                   Refresh Price
-                </Button>
+                </Button> */}
               </div>
             )}
             <ConnectButton />
-            <Button
+            {account.isConnected && !whitelisted.data && 
+            <Button style={{padding: '25px 15px', marginTop: '30px'}} >
+              <a href="https://docs.google.com/forms/d/e/1FAIpQLSdX2KEoikI8g2XR8LSuG_7AuVq9ThD_dJCUutvKcUczWDUSkQ/viewform?usp=sf_link">
+                Apply to join the commons community 
+              </a>
+            </Button>
+            }
+            {whitelisted.data && <Button
               onClick={() =>
                 writeContract(
                   {
@@ -194,20 +202,22 @@ export default function CommonsTokenClaimPage() {
               ) : (
                 <Coins className="mr-2 h-4 w-4" />
               )}
-              {!whitelisted.data ? "Not Eligible" : !canClaim.data ? "Patience, young commoner" : "Claim 10 $COMMONS"}
-            </Button>
-            <div className="text-center items-center">
+        
+              {!canClaim.data ? "Patience, young commoner" : "Claim 10 $COMMONS"}
+            </Button>}
+           { whitelisted.data && <div className="text-center items-center">
               <p className="font-bold">Next Claim In</p>
               <p className="text-xl">
                 {account.isConnected
                   ? formatTime(Number(countdownTime.data))
                   : "--------"}
               </p>
-            </div>
+            </div>}
           </CardContent>
+
         </Card>
         <br />
-        <a href="https://twitter.com/CommonsProtocol" target="_blank" rel="noopener noreferrer">
+        <a href="https://x.com/CommonsProtocol" target="_blank" rel="noopener noreferrer">
           <Image src="/twitter-logo.svg" alt="Twitter" width={20} height={20} className="filter invert" />
         </a>
       </div>
