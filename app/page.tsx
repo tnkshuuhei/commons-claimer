@@ -1,8 +1,10 @@
 "use client";
+
 import React, { useEffect, useMemo, useState } from "react";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
 import { Loader2, RefreshCw, Coins } from "lucide-react";
+import Image from 'next/image';
 import {
   useAccount,
   useBalance,
@@ -205,7 +207,9 @@ export default function CommonsTokenClaimPage() {
           </CardContent>
         </Card>
         <br />
-        <a href="https://twitter.com/CommonsProtocol" data-size="large" class="twitter-follow-button" data-show-count="false"></a><script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+        <a href="https://twitter.com/CommonsProtocol" target="_blank" rel="noopener noreferrer">
+          <Image src="/twitter-logo.svg" alt="Twitter" width={20} height={20} className="filter invert" />
+        </a>
       </div>
     </main>
   );
