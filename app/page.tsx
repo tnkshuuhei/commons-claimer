@@ -163,7 +163,7 @@ export default function CommonsTokenClaimPage() {
             )}
             <ConnectButton />
             {!whitelisted.data && 
-            <Button style={{padding: '25px 15px', marginTop: '30px'}} >
+            <Button style={{padding: '25px 15px', marginTop: '30px', borderRadius: '15px'}} >
               <a href="https://docs.google.com/forms/d/e/1FAIpQLSdX2KEoikI8g2XR8LSuG_7AuVq9ThD_dJCUutvKcUczWDUSkQ/viewform?usp=sf_link">
                 Apply to join the commons community 
               </a>
