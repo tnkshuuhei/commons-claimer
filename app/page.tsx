@@ -125,7 +125,7 @@ export default function CommonsTokenClaimPage() {
           <CardHeader className="text-center items-center">
             <CardTitle>Commons Builder Income</CardTitle>
             <CardDescription>
-              You can claim 10 $COMMONS per day
+             <b> You can claim 10 $COMMONS per day</b>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -215,11 +215,22 @@ export default function CommonsTokenClaimPage() {
             </div>}
           </CardContent>
 
+          <hr style={{ borderTop: "1px solid #9b9c9e", margin: '15px 15px 15px 0', paddingBottom: '8px'}}/>
+          <CardDescription style={{fontSize: "12px", textAlign: 'center'}}>
+            Commons token is a community-driven initiative designed to incentivize the sustainable development and protection of shared resources/commons. It aims to create systems that restore, regenerate, and replenish the natural and social capital.
+        </CardDescription>
         </Card>
+
         <br />
-        <a href="https://x.com/CommonsProtocol" target="_blank" rel="noopener noreferrer">
+        {/* <a href="https://x.com/CommonsProtocol" target="_blank" rel="noopener noreferrer">
           <Image src="/twitter-logo.svg" alt="Twitter" width={20} height={20} className="filter invert" />
+        </a> */}
+        <p style={{fontSize: '12px', textDecoration: 'underline', color: '#777777'}}>
+              <a href="https://app.uniswap.org/explore/tokens/celo/0x7b97031b6297bc8e030b07bd84ce92fea1b00c3e" target="_blank" rel="noopener noreferrer">
+              $COMMONS on Uniswap
+          <Image style={{display: 'inline-block'}}color="#9b9c9e" src="/hyperlink.svg" alt="Twitter" width={32} height={32}  />
         </a>
+        </p>
       </div>
     </main>
   );
