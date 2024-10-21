@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 
 import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Loader2, RefreshCw, Coins } from "lucide-react";
+import { Coins, Loader2 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import {
   useAccount,
   useBalance,
@@ -14,12 +15,12 @@ import {
 } from "wagmi";
 import { celo } from "wagmi/chains";
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -84,7 +85,15 @@ export default function CommonsTokenClaimPage() {
     if (isSuccess) {
       toast({
         title: "Tx successfully confirmed",
-        description: "Copy",
+        description: (
+          <div>
+            Copy
+            <br />
+            <Link href="/stake" className="text-blue-500 hover:underline">
+              Go to staking page
+            </Link>
+          </div>
+        ),
         action: (
           <ToastAction
             altText="Copy to clipboard"
@@ -114,7 +123,7 @@ export default function CommonsTokenClaimPage() {
         ),
       });
     }
-  }, [isSuccess, isError]);
+  }, [isSuccess, isError, hash, toast]);
 
   return (
     <main>
@@ -123,7 +132,7 @@ export default function CommonsTokenClaimPage() {
           <CardHeader className="text-center items-center">
             <CardTitle>Commons Builder Income</CardTitle>
             <CardDescription>
-              <b> You can claim 10 $COMMONS per day</b>
+              <b>You can claim 10 $COMMONS per day</b>
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
@@ -158,12 +167,25 @@ export default function CommonsTokenClaimPage() {
                 ) : (
                   ""
                 )}
-                {/* <Button disabled variant="outline" size="sm" className="mt-2">
-                  <RefreshCw className="mr-2 h-4 w-4" />
-                  Refresh Price
-                </Button> */}
               </div>
             )}
+            {account.isConnected &&
+              tokenBalance.data &&
+              tokenBalance.data.value > BigInt(0) && (
+                <Alert>
+                  <AlertTitle>You have $COMMONS tokens!</AlertTitle>
+                  <AlertDescription>
+                    Consider staking your tokens to support the Commons
+                    community.{" "}
+                    <Link
+                      href="/stake"
+                      className="font-medium underline underline-offset-4"
+                    >
+                      Go to staking page
+                    </Link>
+                  </AlertDescription>
+                </Alert>
+              )}
             <ConnectButton />
             {!whitelisted.data && (
               <Button
@@ -173,11 +195,7 @@ export default function CommonsTokenClaimPage() {
                   borderRadius: "15px",
                 }}
               >
-                <a
-                  href="https://docs.google.com/forms/d/e/1FAIpQLSdX2KEoikI8g2XR8LSuG_7AuVq9ThD_dJCUutvKcUczWDUSkQ/viewform?usp=sf_link"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href="https://docs.google.com/forms/d/e/1FAIpQLSdX2KEoikI8g2XR8LSuG_7AuVq9ThD_dJCUutvKcUczWDUSkQ/viewform?usp=sf_link">
                   Apply to join the commons community
                 </a>
               </Button>
@@ -216,7 +234,6 @@ export default function CommonsTokenClaimPage() {
                 ) : (
                   <Coins className="mr-2 h-4 w-4" />
                 )}
-
                 {!canClaim.data
                   ? "Patience, young commoner"
                   : "Claim 10 $COMMONS"}
@@ -250,9 +267,6 @@ export default function CommonsTokenClaimPage() {
         </Card>
 
         <br />
-        {/* <a href="https://x.com/CommonsProtocol" target="_blank" rel="noopener noreferrer">
-          <Image src="/twitter-logo.svg" alt="Twitter" width={20} height={20} className="filter invert" />
-        </a> */}
         <p
           style={{
             fontSize: "12px",
