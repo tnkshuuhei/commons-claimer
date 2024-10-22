@@ -89,10 +89,17 @@ export default function InsightPage() {
         balance: parseFloat(formatEther(BigInt(account.balance)))
     }));
 
+    const balancesWithoutZeroAddress = sortedAccounts.reduce((acc, account) => {
+        if (account.id !== '0x0000000000000000000000000000000000000000') {
+            acc.push(account);
+        }
+        return acc;
+    }, [] as Account[]);
+
     const chartData = {
-        labels: accountBalances.map(account => `${account.id.slice(0, 6)}...${account.id.slice(-4)}`),
+        labels: balancesWithoutZeroAddress.map(account => `${account.id.slice(0, 6)}...${account.id.slice(-4)}`),
         datasets: [{
-            data: accountBalances.map(account => account.balance),
+            data: balancesWithoutZeroAddress.map(account => account.balance),
             backgroundColor: CHART_COLORS,
             hoverBackgroundColor: CHART_COLORS.map(color => color + 'CC'),
         }],
@@ -108,7 +115,7 @@ export default function InsightPage() {
                     label: (context: any) => {
                         const label = context.label || '';
                         const value = context.raw || 0;
-                        return `${label}: ${value.toFixed(2)} $COMMONS`;
+                        return `${label}: ${value ? formatEther(value) : '0'} $COMMONS`;
                     },
                 },
             },
