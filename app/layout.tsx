@@ -11,7 +11,7 @@ import { celo } from "wagmi/chains";
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
 
-const config = getDefaultConfig({
+export const config = getDefaultConfig({
   appName: "$COMMONS Claimer",
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
   chains: [celo],
@@ -36,7 +36,7 @@ export default function RootLayout({
         <WagmiProvider config={config} reconnectOnMount={true}>
           <QueryClientProvider client={client}>
             <RainbowKitProvider>
-              {/* <Header /> */}
+              <Header />
               <Toaster />
               {children}
             </RainbowKitProvider>
