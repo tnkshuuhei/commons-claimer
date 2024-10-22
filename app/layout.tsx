@@ -36,7 +36,7 @@ export default function RootLayout({
         <WagmiProvider config={config} reconnectOnMount={true}>
           <QueryClientProvider client={client}>
             <RainbowKitProvider>
-              {/* <Header /> */}
+              <Header />
               <Toaster />
               {children}
             </RainbowKitProvider>
