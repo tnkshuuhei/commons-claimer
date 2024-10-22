@@ -1,99 +1,104 @@
 "use client";
-import React, { useState } from "react";
+import React, {useState} from "react";
 
-import { ConnectButton } from "@rainbow-me/rainbowkit";
-import { Menu, X } from "lucide-react";
+import {ConnectButton} from "@rainbow-me/rainbowkit";
+import {Menu, X} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
 const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+    };
 
-  const menuItems = [
-    { href: "/", label: "Home" },
-    { href: "/stake", label: "Stake" },
-    { href: 'https://app.uniswap.org/explore/tokens/celo/0x7b97031b6297bc8e030b07bd84ce92fea1b00c3e', label: 'Swap', newTab: true},
-    { href: "/tip", label: "Tip" },
-    { href: 'https://guild.xyz/commons', label: 'Guild', newTab: true}
-  ];
+    const menuItems = [
+        {href: "/", label: "Home"},
+        {href: "/stake", label: "Stake"},
+        {
+            href: 'https://app.uniswap.org/explore/tokens/celo/0x7b97031b6297bc8e030b07bd84ce92fea1b00c3e',
+            label: 'Swap',
+            newTab: true
+        },
+        {href: "/tip", label: "Tip"},
+        {href: "/inspect", label: "Inspect"},
+        {href: 'https://guild.xyz/commons', label: 'Guild', newTab: true}
+    ];
 
-  return (
-    <nav className="border-gray-200 px-4 lg:px-6 py-5 bg-white">
-      <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
-        {/* Logo */}
-        <Link href="/" className="flex items-center">
-          <Image
-            src="/commons-logo.jpg"
-            alt="Logo"
-            width={50}
-            height={50}
-            className="rounded-full"
-          />
-        </Link>
-
-        {/* Mobile Menu Button */}
-        <div className="flex items-center lg:hidden">
-          <ConnectButton />
-          <button
-            onClick={toggleMenu}
-            type="button"
-            className="ml-3 inline-flex items-center p-2 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 rounded-lg"
-            aria-controls="mobile-menu"
-            aria-expanded={isMenuOpen}
-          >
-            <span className="sr-only">Open main menu</span>
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Desktop Navigation */}
-        <div className="hidden lg:flex lg:items-center lg:w-auto">
-          <ul className="flex space-x-8">
-            {menuItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  target={item.newTab ? "_blank" : ""}
-                  className="text-gray-700 hover:text-primary-700 transition-colors duration-200"
-                >
-                  {item.label}
+    return (
+        <nav className="border-gray-200 px-4 lg:px-6 py-5 bg-white">
+            <div className="flex flex-wrap justify-between items-center mx-auto max-w-screen-xl">
+                {/* Logo */}
+                <Link href="/" className="flex items-center">
+                    <Image
+                        src="/commons-logo.jpg"
+                        alt="Logo"
+                        width={50}
+                        height={50}
+                        className="rounded-full"
+                    />
                 </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
 
-        {/* Desktop ConnectButton */}
-        <div className="hidden lg:flex items-center">
-          <ConnectButton />
-        </div>
+                {/* Mobile Menu Button */}
+                <div className="flex items-center lg:hidden">
+                    <ConnectButton/>
+                    <button
+                        onClick={toggleMenu}
+                        type="button"
+                        className="ml-3 inline-flex items-center p-2 text-gray-500 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 rounded-lg"
+                        aria-controls="mobile-menu"
+                        aria-expanded={isMenuOpen}
+                    >
+                        <span className="sr-only">Open main menu</span>
+                        {isMenuOpen ? <X size={24}/> : <Menu size={24}/>}
+                    </button>
+                </div>
 
-        {/* Mobile Navigation */}
-        <div
-          className={`${isMenuOpen ? "block" : "hidden"} lg:hidden w-full mt-4`}
-          id="mobile-menu"
-        >
-          <ul className="flex flex-col space-y-4 pt-4 border-t border-gray-200">
-            {menuItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  href={item.href}
-                  className="block text-gray-700 hover:text-primary-700 transition-colors duration-200"
-                  onClick={() => setIsMenuOpen(false)}
+                {/* Desktop Navigation */}
+                <div className="hidden lg:flex lg:items-center lg:w-auto">
+                    <ul className="flex space-x-8">
+                        {menuItems.map((item) => (
+                            <li key={item.label}>
+                                <Link
+                                    href={item.href}
+                                    target={item.newTab ? "_blank" : ""}
+                                    className="text-gray-700 hover:text-primary-700 transition-colors duration-200"
+                                >
+                                    {item.label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                {/* Desktop ConnectButton */}
+                <div className="hidden lg:flex items-center">
+                    <ConnectButton/>
+                </div>
+
+                {/* Mobile Navigation */}
+                <div
+                    className={`${isMenuOpen ? "block" : "hidden"} lg:hidden w-full mt-4`}
+                    id="mobile-menu"
                 >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-      </div>
-    </nav>
-  );
+                    <ul className="flex flex-col space-y-4 pt-4 border-t border-gray-200">
+                        {menuItems.map((item) => (
+                            <li key={item.label}>
+                                <Link
+                                    href={item.href}
+                                    className="block text-gray-700 hover:text-primary-700 transition-colors duration-200"
+                                    onClick={() => setIsMenuOpen(false)}
+                                >
+                                    {item.label}
+                                </Link>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    );
 };
 
 export default Header;
