@@ -73,4 +73,8 @@ export const data: UserData[] = [
     name: "Sharfy",
     address: "sharfy.eth",
   },
+  {
+    name: "Abhimanyu",
+    address: "abhimanyu.eth",
+  },
 ];
