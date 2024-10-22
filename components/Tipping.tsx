@@ -1,10 +1,10 @@
 "use client";
 import React, { useEffect } from "react";
 
-import { EAS, SchemaEncoder } from "@ethereum-attestation-service/eas-sdk";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
+import { parseUnits } from "viem";
 import {
   useAccount,
   useWaitForTransactionReceipt,
@@ -37,12 +37,10 @@ import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
 
 import { commonsConfig } from "@/abis/commons";
+import { praiseConfig } from "@/abis/praise";
 import { UserData } from "@/data";
-import { useEthersSigner } from "@/hooks/useEthers";
 import { ENSResolver } from "@/lib/ens";
 import { DefaultAvatar } from "@/public";
-import { SCHEMA_UID } from "@/utils";
-const EASContractAddress = "0x72E1d8ccf5299fb36fEfD8CC4394B8ef7e98Af92";
 
 const formSchema = z.object({
   comment: z
@@ -72,24 +70,71 @@ export default function Tipping({ name, address, imageUrl }: UserData) {
       address: address,
     },
   });
-  const signer = useEthersSigner({ chainId: 42220 });
-  const eas = new EAS(EASContractAddress);
-  eas.connect(signer!);
-
-  const schemaEncoder = new SchemaEncoder(
-    "string praise, address from, address to"
-  );
 
   const { data: hash, writeContract } = useWriteContract();
 
-  async function sendCommons(recipient: `0x${string}`, amount: string) {
-    const tippedAmount = BigInt(amount) * BigInt(10 ** 18);
-    writeContract({
-      abi: commonsConfig.abi,
-      address: commonsConfig.address as `0x${string}`,
-      functionName: "transfer",
-      args: [recipient, tippedAmount],
-    });
+  async function handleSetAllowance(amount: string) {
+    const allowanceAmount = parseUnits(amount, 18);
+    writeContract(
+      {
+        abi: commonsConfig.abi,
+        address: commonsConfig.address as `0x${string}`,
+        functionName: "approve",
+        args: [praiseConfig.address as `0x${string}`, allowanceAmount],
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Success",
+            description: "Allowance set successfully.",
+          });
+        },
+        onError: (e) => {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: e.message,
+          });
+        },
+      }
+    );
+  }
+
+  async function praise(
+    comment: string,
+    recipient: `0x${string}`,
+    amount: string
+  ) {
+    const tippedAmount = parseUnits(amount, 18);
+
+    writeContract(
+      {
+        abi: praiseConfig.abi,
+        address: praiseConfig.address as `0x${string}`,
+        functionName: "praiseWithTip",
+        args: [
+          comment,
+          account.address as `0x${string}`,
+          recipient,
+          tippedAmount,
+        ],
+      },
+      {
+        onSuccess: () => {
+          toast({
+            title: "Success",
+            description: "Tx submitted successfully.",
+          });
+        },
+        onError: (e) => {
+          toast({
+            variant: "destructive",
+            title: "Error",
+            description: e.message,
+          });
+        },
+      }
+    );
   }
 
   async function onSubmit(data: z.infer<typeof formSchema>) {
@@ -97,30 +142,8 @@ export default function Tipping({ name, address, imageUrl }: UserData) {
 
     const recipient = await ensResolver.resolveAddress(address);
 
-    console.log("account:", account.address);
-    console.log("recipient:", recipient);
-
-    const encodedData = schemaEncoder.encodeData([
-      { name: "praise", type: "string", value: comment },
-      { name: "from", type: "address", value: account.address! },
-      { name: "to", type: "address", value: recipient! },
-    ]);
-
-    const transaction = await eas.attest({
-      schema: SCHEMA_UID,
-      data: {
-        recipient: recipient!,
-        expirationTime: BigInt(0),
-        revocable: true,
-        data: encodedData,
-      },
-    });
-
-    const newAttestationUID = await transaction.wait();
-    console.log("New attestation UID:", newAttestationUID);
-    console.log("Transaction receipt:", transaction.receipt);
-
-    sendCommons(recipient as `0x${string}`, amount);
+    await handleSetAllowance(amount);
+    await praise(comment, recipient as `0x${string}`, amount);
   }
 
   const { isLoading, isSuccess, isError } = useWaitForTransactionReceipt({
@@ -189,7 +212,7 @@ export default function Tipping({ name, address, imageUrl }: UserData) {
             </DialogDescription>
             <a
               className="text-sm text-gray-600 font-mono break-all"
-              href={`https://celo.easscan.org/schema/view/0xa1215b03d4956c2e07792ccc30da1b48742a2c6dde9b12d2c97d5b16cf8263b8`}
+              href={`https://celo.easscan.org/schema/view/0x593a851ab1a1c24f811b6fc5a4df86a4df7dd14f441c2d99476af3d5ef56341a`}
               target="_blank"
               rel="noreferrer"
             >
@@ -240,7 +263,12 @@ export default function Tipping({ name, address, imageUrl }: UserData) {
                   </FormItem>
                 )}
               />
-              <Button type="submit">Submit</Button>
+              <Button
+                disabled={isLoading || !account.isConnected}
+                type="submit"
+              >
+                Submit
+              </Button>
             </form>
           </Form>
         </DialogContent>

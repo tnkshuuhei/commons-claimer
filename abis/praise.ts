@@ -87,7 +87,7 @@ const abi = [
   },
 ] as const;
 
-export const rewardConfig = {
+export const praiseConfig = {
   address: address,
   abi: abi,
 };

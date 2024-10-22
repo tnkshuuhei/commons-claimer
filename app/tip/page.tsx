@@ -8,7 +8,7 @@ import { data, UserData } from "@/data";
 export default function TipPage() {
   const recipients: UserData[] = data;
   return (
-    <div className="grid grid-cols-2 gap-4 lg:p-12 p-4 items-center mx-auto">
+    <div className="lg:grid lg:grid-cols-2 gap-4 lg:p-12 p-4 items-center mx-auto">
       {recipients.map((recipient, index) => (
         <Tipping key={index} {...recipient} />
       ))}

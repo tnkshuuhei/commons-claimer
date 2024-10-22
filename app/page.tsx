@@ -186,7 +186,6 @@ export default function CommonsTokenClaimPage() {
                   </AlertDescription>
                 </Alert>
               )}
-            <ConnectButton />
             {!whitelisted.data && (
               <Button
                 style={{
