@@ -266,29 +266,6 @@ export default function CommonsTokenClaimPage() {
         </Card>
 
         <br />
-        <p
-          style={{
-            fontSize: "12px",
-            textDecoration: "underline",
-            color: "#777777",
-          }}
-        >
-          <a
-            href="https://app.uniswap.org/explore/tokens/celo/0x7b97031b6297bc8e030b07bd84ce92fea1b00c3e"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            $COMMONS on Uniswap
-            <Image
-              style={{ display: "inline-block" }}
-              color="#9b9c9e"
-              src="/hyperlink.svg"
-              alt="Twitter"
-              width={32}
-              height={32}
-            />
-          </a>
-        </p>
       </div>
     </main>
   );
