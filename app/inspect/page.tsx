@@ -1,14 +1,16 @@
 "use client";
 import React, {useEffect, useState} from "react";
-import {gql, request} from 'graphql-request';
-import {formatEther} from "viem";
-import {Pie} from 'react-chartjs-2';
+
 import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
-import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
-import {Skeleton} from "@/components/ui/skeleton";
-import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {Input} from "@/components/ui/input";
+import {gql, request} from 'graphql-request';
+import {Pie} from 'react-chartjs-2';
+import {formatEther} from "viem";
+
 import {Button} from "@/components/ui/button";
+import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
+import {Input} from "@/components/ui/input";
+import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
+import {Skeleton} from "@/components/ui/skeleton";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -53,6 +55,8 @@ export default function InsightPage() {
         const fetchData = async () => {
             try {
                 const data = await request('https://indexer.bigdevenergy.link/92f8c3e/v1/graphql/', QUERY_DOCUMENT);
+
+                // @ts-ignore
                 setAccounts(data.Account);
             } catch (error) {
                 console.error("Error fetching data:", error);

@@ -5,12 +5,12 @@ import React from "react";
 
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import {mainnet} from "@wagmi/core/chains";
 import { WagmiProvider } from "wagmi";
 import { celo } from "wagmi/chains";
 
 import Header from "@/components/Header";
 import { Toaster } from "@/components/ui/toaster";
-import {mainnet} from "@wagmi/core/chains";
 
 export const config = getDefaultConfig({
   appName: "$COMMONS Claimer",
