@@ -21,7 +21,7 @@ const Header = () => {
             label: 'Swap',
             newTab: true
         },
-        {href: "/tip", label: "Tip"},
+        // {href: "/tip", label: "Tip"},
         {href: "/inspect", label: "Inspect"},
         {href: 'https://guild.xyz/commons', label: 'Guild', newTab: true}
     ];
