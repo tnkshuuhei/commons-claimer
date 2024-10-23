@@ -5,7 +5,8 @@ import React from "react";
 
 import { getDefaultConfig, RainbowKitProvider } from "@rainbow-me/rainbowkit";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { WagmiProvider, http } from "wagmi";
+import {mainnet} from "@wagmi/core/chains";
+import { WagmiProvider } from "wagmi";
 import { celo } from "wagmi/chains";
 
 import Header from "@/components/Header";
@@ -14,7 +15,7 @@ import { Toaster } from "@/components/ui/toaster";
 export const config = getDefaultConfig({
   appName: "$COMMONS Claimer",
   projectId: process.env.NEXT_PUBLIC_PROJECT_ID!,
-  chains: [celo],
+  chains: [celo, mainnet],
   ssr: true,
 });
 const client = new QueryClient();
