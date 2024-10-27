@@ -151,7 +151,7 @@ export default function CommonsTokenStakingPage() {
       toast({
         variant: "destructive",
         title: "Invalid amount",
-        description: "Please enter a valid amount to stake.",
+        description: "Please enter a valid amount to lock.",
       });
       return;
     }
@@ -162,7 +162,7 @@ export default function CommonsTokenStakingPage() {
       toast({
         variant: "destructive",
         title: "Insufficient balance",
-        description: "You don't have enough tokens to stake this amount.",
+        description: "You don't have enough tokens to lock this amount.",
       });
       return;
     }
@@ -172,7 +172,7 @@ export default function CommonsTokenStakingPage() {
       toast({
         variant: "destructive",
         title: "Insufficient allowance",
-        description: "Please set allowance before staking.",
+        description: "Please set allowance before locking.",
       });
       return;
     }
@@ -264,14 +264,15 @@ export default function CommonsTokenStakingPage() {
   return (
     <main>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <br/>
         <Card className="w-[350px]">
           <CardHeader className="text-center items-center">
-            <CardTitle>Commons Staking</CardTitle>
+            <CardTitle>Membership NFT</CardTitle>
             <CardDescription>
               <b>
                 {stakedToken.data && BigInt(stakedToken.data) !== BigInt(0)
-                  ? "Manage your staked $COMMONS"
-                  : "Stake your $COMMONS to show your commitment to the Commons Community"}
+                  ? "Manage your locked $COMMONS. The more tokens you lock, and for longer, the more you can benefit from the Commons Community"
+                  : "Lock your $COMMONS to access and benefit from some special initiatives and resources from the Commons Community"}
               </b>
             </CardDescription>
           </CardHeader>
@@ -399,7 +400,7 @@ export default function CommonsTokenStakingPage() {
             }}
           />
           <CardDescription style={{ fontSize: "12px", textAlign: "center" }}>
-            Commons token is a community-driven initiative designed to
+            Commons protocol is a community-driven initiative designed to
             incentivize the sustainable development and protection of shared
             resources/commons. It aims to create systems that restore,
             regenerate, and replenish the natural and social capital.

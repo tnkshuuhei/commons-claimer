@@ -14,14 +14,16 @@ const Header = () => {
     };
 
     const menuItems = [
-        {href: "/", label: "Home"},
-        {href: "/stake", label: "Stake"},
+        {href: "/", label: "Earn"},
+        {href: "/manifesto", label: "Manifesto"},
+        {href: "/token", label: "Token"},
+        {href: "/stake", label: "Membership"},
         {
             href: 'https://app.uniswap.org/explore/tokens/celo/0x7b97031b6297bc8e030b07bd84ce92fea1b00c3e',
             label: 'Swap',
             newTab: true
         },
-        // {href: "/tip", label: "Tip"},
+        {href: "/tip", label: "Tip"},
         {href: "/inspect", label: "Inspect"},
         {href: 'https://guild.xyz/commons', label: 'Guild', newTab: true}
     ];
