@@ -25,7 +25,7 @@ export default function TokenPage() {
           <br/><p>The Commons Token is built on the Rochdale Principles of cooperation and mutual benefit. It aims to create a sustainable, regenerative economy for projects focused on public goods. Here is why it matters:</p>
     
             
-            <ul>
+            <ul><br/>
               <li><b>1. Sustainable Income for Builders</b><br/>
               <br/> <b>- Economic Participation:</b> The Commons Token ensures builders have a steady income to focus on long-term projects, providing consistent support for those creating public goods.
               <br/> <b>- Shared Success:</b> Builders commit a portion of their future projects back into the Commons ecosystem, pairing their own tokens with the Commons Token. This means the success of individual projects directly benefits the whole community, aligning incentives for mutual growth.</li>

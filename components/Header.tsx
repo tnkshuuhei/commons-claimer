@@ -24,8 +24,8 @@ const Header = () => {
             newTab: true
         },
         {href: "/tip", label: "Tip"},
-        {href: "/inspect", label: "Inspect"},
-        {href: 'https://guild.xyz/commons', label: 'Guild', newTab: true}
+        {href: "/inspect", label: "Distribution"},
+        //{href: 'https://guild.xyz/commons', label: 'Guild', newTab: true}
     ];
 
     return (

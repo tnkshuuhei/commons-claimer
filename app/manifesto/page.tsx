@@ -53,6 +53,7 @@ export default function ManifestoPage() {
 
           </CardContent>
         </Card>
+        
       </div>
     </main>
   );
