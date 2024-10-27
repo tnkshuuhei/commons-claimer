@@ -127,7 +127,8 @@ export default function CommonsTokenClaimPage() {
 
   return (
     <main>
-      <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100 p-4">
+      <div className="flex flex-col items-center justify-center min-h-[calc(100vh-64px)] bg-gray-100 p-4">
+      <br/>
         <Card className="w-[350px]">
           <CardHeader className="text-center items-center">
             <CardTitle>Commons Builder Income</CardTitle>
@@ -169,23 +170,23 @@ export default function CommonsTokenClaimPage() {
                 )}
               </div>
             )}
-            {account.isConnected &&
+             {account.isConnected &&
               tokenBalance.data &&
               tokenBalance.data.value > BigInt(0) && (
                 <Alert>
-                  <AlertTitle>You have $COMMONS tokens!</AlertTitle>
+                  <AlertTitle>Your Builder Score soon...</AlertTitle>
                   <AlertDescription>
-                    Consider staking your tokens to support the Commons
-                    community.{" "}
+                    Get your score from TalentProtocol to increase your builder income.{" "}
                     <Link
-                      href="/stake"
+                      href="https://passport.talentprotocol.com/"
                       className="font-medium underline underline-offset-4"
+                      target="_blank"
                     >
-                      Go to staking page
+                      <br/><br/>Create your Talent Passport
                     </Link>
                   </AlertDescription>
                 </Alert>
-              )}
+              )} 
             {!whitelisted.data && (
               <Button
                 style={{
@@ -258,7 +259,7 @@ export default function CommonsTokenClaimPage() {
             }}
           />
           <CardDescription style={{ fontSize: "12px", textAlign: "center" }}>
-            Commons token is a community-driven initiative designed to
+            Commons protocol is a community-driven initiative designed to
             incentivize the sustainable development and protection of shared
             resources/commons. It aims to create systems that restore,
             regenerate, and replenish the natural and social capital.
@@ -266,6 +267,15 @@ export default function CommonsTokenClaimPage() {
         </Card>
 
         <br />
+        <p style={{fontSize: '12px', textDecoration: 'underline', color: '#777777'}}>
+                    <a href="https://app.uniswap.org/explore/tokens/celo/0x7b97031b6297bc8e030b07bd84ce92fea1b00c3e"
+                       target="_blank" rel="noopener noreferrer">
+                        $COMMONS on Uniswap
+                        <Image style={{display: 'inline-block'}} color="#9b9c9e" src="/hyperlink.svg" alt="Twitter"
+                               width={32} height={32}/>
+                    </a>
+                </p>
+                <br />
       </div>
     </main>
   );
