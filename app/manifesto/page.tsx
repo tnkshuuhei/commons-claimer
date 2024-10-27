@@ -28,7 +28,7 @@ export default function ManifestoPage() {
             <ul>
               <li><b>0. Directionally Decentralized:</b> The following points are our goals and our DAO commits to a best effort to follow up on that commitment.</li>
               <br/><li><b>1. Voluntary and Open Participation:</b> The system is open to all who wish to contribute to and benefit from shared resources, without discrimination. While tokens can be traded, meaningful participation comes through active and diversified contributions to the commons.</li>
-              <br/><li><b>2. Democratic Control:</b> Each token holder has an equal voice in governance (one member, one vote), regardless of the number of tokens held. This ensures decisions about shared resources reflect the community's needs, not wealth concentration.</li>
+              <br/><li><b>2. Democratic Control:</b> {"Each token holder has an equal voice in governance (one member, one vote), regardless of the number of tokens held. This ensures decisions about shared resources reflect the community's needs, not wealth concentration."}</li>
               <br/><li><b>3. Member Economic Participation:</b> Token holders contribute equitably to, and democratically control, the commons. While tokens can be claimed, as income by builders, and traded, their fundamental value comes from:
               <br/> - Verified contributions to shared resources
               <br/> - Limited returns on speculation
