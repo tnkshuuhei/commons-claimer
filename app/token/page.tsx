@@ -18,7 +18,7 @@ export default function TokenPage() {
           <CardHeader className="text-center">
             <CardTitle>$COMMONS Token</CardTitle>
             <CardDescription>
-            Why it's important and it's Mission
+            Why it is important and its Mission
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4 prose">
@@ -42,7 +42,7 @@ export default function TokenPage() {
 
             <br/><h2> <b>Mission</b></h2>
             <p>
-              The Commons Token aims to build a cooperative economy where public goods and community-driven projects can thrive. By providing sustainable income, fostering shared ownership, and aligning success with positive social impact, it ensures that projects focused on the common good have the support they need. It's a vision for a future where collaboration and mutual benefit drive a more inclusive and sustainable world.
+              The Commons Token aims to build a cooperative economy where public goods and community-driven projects can thrive. By providing sustainable income, fostering shared ownership, and aligning success with positive social impact, it ensures that projects focused on the common good have the support they need. It is a vision for a future where collaboration and mutual benefit drive a more inclusive and sustainable world.
             </p>
 
           </CardContent>
