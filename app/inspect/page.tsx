@@ -19,6 +19,8 @@ import {
 } from "@/components/ui/select";
 import { Skeleton } from "@/components/ui/skeleton";
 
+import WalletHolders from "./WalletHolders";
+
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const QUERY_DOCUMENT = gql`
@@ -146,6 +148,9 @@ export default function InsightPage() {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8">Common Holders</h1>
+      <WalletHolders accounts={accounts} />
+
       <h1 className="text-3xl font-bold mb-8">Account Insights</h1>
 
       <div className="mb-4 flex space-x-4">
