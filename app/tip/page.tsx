@@ -2,8 +2,9 @@
 import React, { useEffect } from "react";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useQuery } from "@tanstack/react-query";
 import { isAddress } from "ethers";
-import { gql } from "graphql-request";
+import request, { gql } from "graphql-request";
 import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import { useForm } from "react-hook-form";
@@ -18,6 +19,9 @@ import { celo } from "wagmi/chains";
 import { z } from "zod";
 
 import ENSResolverInput from "@/components/ens-input";
+import TipAttestation, {
+  TipAttestationProps,
+} from "@/components/tip-attestation";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -45,13 +49,7 @@ import { DefaultAvatar } from "@/public";
 
 const query = gql`
   query Attestations($schemaId: String!) {
-    attestations(
-      where: {
-        schemaId: {
-          equals: "0x593a851ab1a1c24f811b6fc5a4df86a4df7dd14f441c2d99476af3d5ef56341a"
-        }
-      }
-    ) {
+    attestations(where: { schemaId: { equals: $schemaId } }) {
       id
       data
       decodedDataJson
@@ -89,6 +87,23 @@ export default function TipPage() {
   const account = useAccount();
 
   const { toast } = useToast();
+
+  const {
+    data: attestationData,
+    isLoading: isAttestationLoading,
+    isError: isAttestationError,
+  } = useQuery<TipAttestationProps[]>({
+    queryKey: ["attestations"],
+    queryFn: async () => {
+      return await request("https://celo.easscan.org/graphql", query, {
+        schemaId:
+          "0x593a851ab1a1c24f811b6fc5a4df86a4df7dd14f441c2d99476af3d5ef56341a",
+      }).then((res: any) => res.attestations);
+    },
+    refetchInterval: 1000,
+  });
+
+  console.log("attestationData", attestationData);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -280,123 +295,139 @@ export default function TipPage() {
   }, [isTipped, IsErrorTipped, tipHash, toast]);
 
   return (
-    <Card className="w-[500px] mx-auto">
-      <CardHeader>
-        <CardTitle>Tip to commoners with comment</CardTitle>
-        <CardDescription>
-          tipped amount will be sent to recipient directly. The comment and
-          amount will be stored on-chain via EAS.
-        </CardDescription>
-        <a
-          className="text-sm text-gray-600 font-mono break-all"
-          href={`https://celo.easscan.org/schema/view/0x593a851ab1a1c24f811b6fc5a4df86a4df7dd14f441c2d99476af3d5ef56341a`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          view schema on easscan
-        </a>
-      </CardHeader>
-      <CardContent>
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-            <FormField
-              control={form.control}
-              name={"recipient"}
-              render={({ field }) => (
-                <ENSResolverInput
-                  field={field}
-                  placeholder="0x... or ENS name"
-                />
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="comment"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Textarea
-                      placeholder="Thanks commoner!"
-                      className="border border-gray-300 rounded-md p-2"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormDescription>Leave a comment</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="amount"
-              render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <div className="flex items-center space-x-4 gap-2">
-                      <Input
-                        id="amount"
-                        placeholder="0"
-                        className="border border-gray-300 rounded-md p-2"
-                        {...field}
-                      />
-                      $COMMONS
-                    </div>
-                  </FormControl>
-                  <FormDescription>Amount to tip</FormDescription>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <div className="flex flex-col gap-2 items-center">
-              {parseUnits(form.watch("amount").toString(), 18) >
-                allowanceAvailable && (
-                <Button
-                  type="button"
-                  className="w-full"
-                  disabled={
-                    !account.isConnected || isApproving || !form.watch("amount")
-                  }
-                  onClick={() =>
-                    handleSetAllowance(
-                      BigInt(parseUnits(form.watch("amount").toString(), 18))
-                    )
-                  }
-                >
-                  {isApproving ? (
-                    <>
-                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                      <span>approving...</span>
-                    </>
-                  ) : (
-                    "Approve $COMMONS for contract"
-                  )}
-                </Button>
-              )}
-              <Button
-                disabled={
-                  isApproving ||
-                  !account.isConnected ||
-                  isTipping ||
-                  !form.formState.isValid ||
-                  parseUnits(form.watch("amount").toString(), 18) >
-                    allowanceAvailable
-                }
-                type="submit"
-                className="w-full"
+    <div className="flex flex-col gap-4">
+      <div className="w-[500px] mx-auto">
+        <Card>
+          <CardHeader>
+            <CardTitle>Tip to commoners with comment</CardTitle>
+            <CardDescription>
+              tipped amount will be sent to recipient directly. The comment and
+              amount will be stored on-chain via EAS.
+            </CardDescription>
+            <a
+              className="text-sm text-gray-600 font-mono break-all"
+              href={`https://celo.easscan.org/schema/view/0x593a851ab1a1c24f811b6fc5a4df86a4df7dd14f441c2d99476af3d5ef56341a`}
+              target="_blank"
+              rel="noreferrer"
+            >
+              view schema on easscan
+            </a>
+          </CardHeader>
+          <CardContent>
+            <Form {...form}>
+              <form
+                onSubmit={form.handleSubmit(onSubmit)}
+                className="space-y-8"
               >
-                {isTipping ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    <span>submitting...</span>
-                  </>
-                ) : (
-                  "Tip"
-                )}
-              </Button>
-            </div>
-          </form>
-        </Form>
-      </CardContent>
-    </Card>
+                <FormField
+                  control={form.control}
+                  name={"recipient"}
+                  render={({ field }) => (
+                    <ENSResolverInput
+                      field={field}
+                      placeholder="0x... or ENS name"
+                    />
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="comment"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <Textarea
+                          placeholder="Thanks commoner!"
+                          className="border border-gray-300 rounded-md p-2"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormDescription>Leave a comment</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={form.control}
+                  name="amount"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormControl>
+                        <div className="flex items-center space-x-4 gap-2">
+                          <Input
+                            id="amount"
+                            placeholder="0"
+                            className="border border-gray-300 rounded-md p-2"
+                            {...field}
+                          />
+                          $COMMONS
+                        </div>
+                      </FormControl>
+                      <FormDescription>Amount to tip</FormDescription>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                <div className="flex flex-col gap-2 items-center">
+                  {parseUnits(form.watch("amount").toString(), 18) >
+                    allowanceAvailable && (
+                    <Button
+                      type="button"
+                      className="w-full"
+                      disabled={
+                        !account.isConnected ||
+                        isApproving ||
+                        !form.watch("amount")
+                      }
+                      onClick={() =>
+                        handleSetAllowance(
+                          BigInt(
+                            parseUnits(form.watch("amount").toString(), 18)
+                          )
+                        )
+                      }
+                    >
+                      {isApproving ? (
+                        <>
+                          <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                          <span>approving...</span>
+                        </>
+                      ) : (
+                        "Approve $COMMONS for contract"
+                      )}
+                    </Button>
+                  )}
+                  <Button
+                    disabled={
+                      isApproving ||
+                      !account.isConnected ||
+                      isTipping ||
+                      !form.formState.isValid ||
+                      parseUnits(form.watch("amount").toString(), 18) >
+                        allowanceAvailable
+                    }
+                    type="submit"
+                    className="w-full"
+                  >
+                    {isTipping ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        <span>submitting...</span>
+                      </>
+                    ) : (
+                      "Tip"
+                    )}
+                  </Button>
+                </div>
+              </form>
+            </Form>
+          </CardContent>
+        </Card>
+      </div>
+      <div className="w-[700px] mx-auto">
+        {attestationData?.map((attestation, index) => (
+          <TipAttestation key={index} {...attestation} />
+        ))}
+      </div>
+    </div>
   );
 }
