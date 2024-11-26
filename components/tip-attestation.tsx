@@ -1,16 +1,10 @@
 import React from "react";
 
-import { Calendar, User, Gift } from "lucide-react";
+import { Calendar, User } from "lucide-react";
 import { formatUnits, fromHex } from "viem";
 
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
 
 import { formatBlockTimestamp, sliceAddress } from "@/utils";
 
@@ -44,11 +38,10 @@ export default function TipAttestation({
   timeCreated,
 }: TipAttestationProps) {
   const tipData = JSON.parse(decodedDataJson || "{}");
-  console.log(tipData);
 
   return (
-    <div className="mb-4 w-full">
-      <div className="pt-6">
+    <Card className="mb-4 w-full">
+      <CardContent className="pt-6">
         <div className="flex flex-col space-y-4 md:flex-row md:items-center md:justify-between md:space-y-0">
           <div className="flex items-center space-x-4">
             <div className="space-y-1">
@@ -64,7 +57,7 @@ export default function TipAttestation({
             </div>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex flex-col items-center">
             {tipData[3].value.value && (
               <Badge variant="secondary" className="text-sm">
                 {`${formatUnits(
@@ -75,12 +68,12 @@ export default function TipAttestation({
               </Badge>
             )}
             <div className="flex items-center text-sm text-gray-500">
-              <Calendar className="h-4 w-4 mr-1" />
+              <Calendar className="h-4 w-4" />
               {formatBlockTimestamp(timeCreated.toString())}
             </div>
           </div>
         </div>
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 }

@@ -6,7 +6,6 @@ import { useQuery } from "@tanstack/react-query";
 import { isAddress } from "ethers";
 import request, { gql } from "graphql-request";
 import { Loader2 } from "lucide-react";
-import Image from "next/image";
 import { useForm } from "react-hook-form";
 import { parseUnits } from "viem";
 import {
@@ -19,6 +18,7 @@ import { celo } from "wagmi/chains";
 import { z } from "zod";
 
 import ENSResolverInput from "@/components/ens-input";
+import { SkeletonTipAttestation } from "@/components/skeleton-tip-attestation";
 import TipAttestation, {
   TipAttestationProps,
 } from "@/components/tip-attestation";
@@ -45,7 +45,6 @@ import { useToast } from "@/components/ui/use-toast";
 
 import { commonsConfig } from "@/abis/commons";
 import { praiseConfig } from "@/abis/praise";
-import { DefaultAvatar } from "@/public";
 
 const query = gql`
   query Attestations($schemaId: String!) {
@@ -423,7 +422,11 @@ export default function TipPage() {
           </CardContent>
         </Card>
       </div>
-      <div className="w-[700px] mx-auto">
+      <div className="grid grid-cols-3 gap-4 w-full p-4">
+        {isAttestationLoading &&
+          Array.from({ length: 3 }).map((_, index) => (
+            <SkeletonTipAttestation key={index} />
+          ))}
         {attestationData?.map((attestation, index) => (
           <TipAttestation key={index} {...attestation} />
         ))}
